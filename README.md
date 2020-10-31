@@ -12,7 +12,7 @@ implementation 'com.github.ymkiux:BaseTools:0.0.11'
 
 #### 简单使用
 
-###### Json解析转化Javabean
+###### Json解析转化T
 
 ```
 OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
@@ -29,7 +29,7 @@ OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback 
 })
 ```
 
-###### Json解析转化List<Javabean>
+###### Json解析转化List**<**T>
 
 ```
 OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
