@@ -42,7 +42,6 @@ object Json {
         return Gson().fromJson(text, t)
     }
 
-
     /**
      * Converts an array instance from the <T> a list string
      * @param text The string of the array type
@@ -50,9 +49,12 @@ object Json {
      */
     @Throws(JSONException::class)
     @JvmStatic
-    fun <T> getJsonArrayList(text: String, t: T): List<T> {
+    fun <T> getJsonArrayList(text: String, t: Class<T>): List<T> {
         if (!text.startsWith("[") && !text.endsWith("]")) return throw IllegalArgumentException("Strings are not jason array types")
-        val type: Type = object : TypeToken<List<T>?>() {}.type
-        return Gson().fromJson(JSONArray(text).toString(), type)
+        val list: List<T> = Gson().fromJson(
+            JSONArray(text).toString(),
+            object : TypeToken<List<T?>?>() {}.type
+        )
+        return list
     }
 }

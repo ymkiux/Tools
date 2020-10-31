@@ -2,6 +2,8 @@
 
 打造通用工具类库
 
+![Release](https://jitpack.io/v/ymkiux/tools.svg) ![Apache Licence](http://img.shields.io/badge/license-Apache2.0-ff6600.svg)
+
 #### 引入
 
 ```css
@@ -18,6 +20,24 @@ OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback 
         val string = responseBody!!.string()
         val jsonArrays:TestM = Json.getJsonObject(
             string,
+            TestM::class.java
+        )
+    }
+    override fun error(e: IOException) {
+
+    }
+})
+```
+
+###### Json解析转化List<Javabean>
+
+```
+OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
+    override fun success(responseBody: ResponseBody?) {
+        val string = responseBody!!.string()
+        val jsonArray = Json.getJsonObject(string,"data")
+        val jsonArrays:List<TestM> = Json.getJsonArrayList(
+            jsonArray.toString(),
             TestM::class.java
         )
     }
@@ -44,7 +64,7 @@ OkGo.postUrl("http://192.168.0.104:8080/api/update",hashMap,object :Callback{
      * Called when the request could not be executed due to cancellation
      */
     override fun error(e: IOException) {
-        Log.d("测试", "success: " )
+        Log.d("测试", "error: " )
     }
 
 })
