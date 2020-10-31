@@ -29,7 +29,7 @@ OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback 
 })
 ```
 
-###### Json解析转化List**<**T>
+###### Json解析转化List\<T\>
 
 ```
 OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
