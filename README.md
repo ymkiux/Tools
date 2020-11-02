@@ -7,7 +7,7 @@
 #### 引入
 
 ```css
-implementation 'com.github.ymkiux:BaseTools:0.0.11'
+implementation 'com.github.ymkiux:tools:0.0.12'
 ```
 
 #### 简单使用

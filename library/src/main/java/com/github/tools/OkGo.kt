@@ -81,7 +81,7 @@ object OkGo {
     fun postUrl(
         url: String,
         params: HashMap<String, Any>,
-        headKey: Any,
+        headKey: String,
         headParam: Any,
         callbacks: Callback
     ) {
