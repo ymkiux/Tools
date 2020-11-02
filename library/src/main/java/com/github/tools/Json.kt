@@ -13,6 +13,7 @@ import java.lang.reflect.Type
 
 
 object Json {
+
     /**
      * Get content from the jason field key
      * @param text The string of the object type
