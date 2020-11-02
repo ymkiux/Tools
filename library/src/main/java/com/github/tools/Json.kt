@@ -21,7 +21,7 @@ object Json {
     @Throws(JSONException::class)
     @JvmStatic
     fun getJsonObject(text: String, key: String): Any? {
-        if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not jason object types")
+        if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
         val jsonObject = JSONObject(text)
         val value = jsonObject.get(key)
         if (value is String) return value.toString()
@@ -41,7 +41,7 @@ object Json {
     @Throws(JSONException::class)
     @JvmStatic
     fun <T> getJsonObject(text: String, t: Class<T>): T {
-        if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not jason object types")
+        if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
         return Gson().fromJson(text, t)
     }
 
@@ -53,7 +53,7 @@ object Json {
     @Throws(JSONException::class)
     @JvmStatic
     fun <T> getJsonArrayList(text: String, t: Class<T>): List<T> {
-        if (!text.startsWith("[") && !text.endsWith("]")) return throw IllegalArgumentException("Strings are not jason array types")
+        if (!text.startsWith("[") && !text.endsWith("]")) return throw IllegalArgumentException("Strings are not json array types")
         val list: List<T> = Gson().fromJson(
             JSONArray(text).toString(),
             object : TypeToken<List<T?>?>() {}.type
