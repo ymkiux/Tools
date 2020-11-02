@@ -2,6 +2,9 @@ package com.github.tools
 
 
 import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONException
@@ -56,5 +59,41 @@ object Json {
             object : TypeToken<List<T?>?>() {}.type
         )
         return list
+    }
+
+    /**
+     *Get the appropriate object content with the jason string key
+     * @param res The string of the object type
+     * @param key key
+     */
+    @Throws(JSONException::class)
+    @JvmStatic
+    fun getJsonValue(res: String, key: String): Any {
+        if (!res.startsWith("{") && !res.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
+        return JsonParser().parse(res).getAsJsonObject().get(key)
+    }
+
+    /**
+     * Get the appropriate object content with the jason string key
+     * @param jsonObject The string of the object type
+     * @param key key
+     */
+    @Throws(JsonSyntaxException::class)
+    @JvmStatic
+    fun getAsJsonObjectValue(jsonObject: String, key: String): Any {
+        if (jsonObject.contains("\"$key\"", ignoreCase = true)) {
+            val parser = JsonParser()
+            val element: JsonElement = parser.parse(jsonObject)
+            val root = element.asJsonObject
+            var keyValue: JsonElement? = null
+            try {
+                keyValue = root.get(key)
+            } catch (e: JsonSyntaxException) {
+                e.printStackTrace()
+            }
+            if (keyValue == null) return throw IllegalStateException("The key currently exists but is not in this group")
+            return JsonParser().parse(jsonObject).getAsJsonObject().getAsJsonObject().get(key)
+        }
+        return throw IllegalStateException("This key does not exist at present")
     }
 }
