@@ -1,5 +1,9 @@
 package com.github.tools
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
+import android.os.StrictMode
 import okhttp3.*
 import java.io.IOException
 import java.util.ArrayList
@@ -115,5 +119,27 @@ object OkGo {
                 callbacks.success(response.body)
             }
         })
+    }
+
+    /**
+     * Get bitmaps from the picture url
+     * Suitable for situations where the amount of data requested by the network is small
+     * @param url url link
+     */
+    @JvmStatic
+    fun getBitmap(url: String): Bitmap? {
+        if (Build.VERSION.SDK_INT > 9) {
+            val policy =
+                StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+        }
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(4, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.SECONDS).build()
+        val request: Request = Request.Builder()
+            .url(url)
+            .build()
+        val inputStream = client.newCall(request).execute().body!!.byteStream()
+        return BitmapFactory.decodeStream(inputStream)
     }
 }
