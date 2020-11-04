@@ -35,13 +35,13 @@ object Json {
     /**
      * Convert it into a Javabean type with a johnson string
      * @param text The string of the object type
-     * @param t Data custom Javabean
+     * @param cls Data custom Javabean
      */
     @Throws(JSONException::class)
     @JvmStatic
-    fun <T> getJsonObject(text: String, t: Class<T>): T {
+    fun <T> getJsonObject(text: String, cls: Class<T>): T {
         if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
-        return Gson().fromJson(text, t)
+        return Gson().fromJson(text, cls)
     }
 
     /**
