@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 
 object OkGo {
+    var url: String? = null
 
     /**
      * Encapsulating get no-participation requests
@@ -141,5 +142,23 @@ object OkGo {
             .build()
         val inputStream = client.newCall(request).execute().body!!.byteStream()
         return BitmapFactory.decodeStream(inputStream)
+    }
+
+    /**
+     *Download the file via url to the /Download directory
+     * @param url url file link
+     */
+    @JvmStatic
+    fun downFile(url: String) {
+        this.url = url
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(4, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.SECONDS).build()
+        val inputStream = client.newCall(
+            Request.Builder()
+                .url(url)
+                .build()
+        ).execute().body!!.byteStream()
+        Tools.downFile(inputStream)
     }
 }
