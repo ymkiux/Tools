@@ -1,15 +1,13 @@
 package com.github.tools
 
 
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonParser
-import com.google.gson.JsonSyntaxException
+import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Type
+import java.util.ArrayList
 
 
 object Json {
@@ -49,16 +47,23 @@ object Json {
     /**
      * Converts an array instance from the <T> a list string
      * @param text The string of the array type
-     * @param t Data custom Javabean
+     * @param cls Data custom Javabean
      */
     @Throws(JSONException::class)
     @JvmStatic
-    fun <T> getJsonArrayList(text: String, t: Class<T>): List<T> {
-        if (!text.startsWith("[") && !text.endsWith("]")) return throw IllegalArgumentException("Strings are not json array types")
-        val list: List<T> = Gson().fromJson(
-            JSONArray(text).toString(),
-            object : TypeToken<List<T?>?>() {}.type
-        )
+    fun <T> getJsonArrayList(
+        text: String?,
+        cls: Class<T>?
+    ): List<T>? {
+        val list: MutableList<T> = ArrayList()
+        try {
+            val jsonArray: JsonArray = JsonParser().parse(text).asJsonArray
+            for (jsonElement in jsonArray) {
+                list.add(Gson().fromJson(jsonElement, cls))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         return list
     }
 
