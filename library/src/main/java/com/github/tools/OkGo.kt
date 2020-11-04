@@ -83,6 +83,7 @@ object OkGo {
      * @param headParam Request header value
      * @param callbacks Request a callback
      */
+    @JvmStatic
     fun postUrl(
         url: String,
         params: HashMap<String, Any>,
