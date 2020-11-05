@@ -2,6 +2,7 @@ package com.github.tools
 
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -40,4 +41,16 @@ object Tools {
         fos.close()
     }
 
+    /**
+     *A prompt message
+     * @param tag Label
+     * @param msg Tips
+     */
+    @JvmStatic
+    fun getLog(tag: String, msg: String) {
+        Log.i(
+            tag,
+            msg
+        )
+    }
 }

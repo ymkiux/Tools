@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.StrictMode
+import com.github.tools.Tools.getLog
 import okhttp3.*
 import java.io.IOException
 import java.util.ArrayList
@@ -36,6 +37,41 @@ object OkGo {
                 callbacks.success(response.body)
             }
 
+        })
+    }
+
+    /**
+     * Encapsulating post no-participation requests
+     * @param url Request a link
+     * @param callbacks Request a callback
+     */
+    fun postUrl(url: String, callbacks: Callback) {
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(4, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.SECONDS).build()
+        val requestBody: RequestBody = FormBody.Builder()
+            .build()
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                callbacks.error(e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val response = response
+                callbacks.success(response.body)
+                getLog(
+                    this@OkGo.toString().substring(this@OkGo.toString().lastIndexOf(".") + 1),
+                    "--> POST\t" + url + "\t" + response.protocol
+                )
+                getLog(
+                    this@OkGo.toString().substring(this@OkGo.toString().lastIndexOf(".") + 1),
+                    "<-- " + response.code + "\t" + url
+                )
+            }
         })
     }
 
