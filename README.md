@@ -9,10 +9,18 @@
 ```css
 implementation 'com.github.ymkiux:tools:0.0.12'
 ```
+##### 已实现功能
+
+| Json| OkGo |
+| :--------------: | :--------------: |
+| Json obejct转化为T |普通get/post回调，携带参数的post回调|
+| Json array转化为List<T> |携带参数以及头部自定义参数|
+| Json对象类型字符串通过key获取value |通过图片链接获取bitmap|
+| Json数组类型字符串通过key获取value |通过文件下载链接获取流并下载至公有目录Download下|
 
 #### 简单使用
 
-###### Json解析转化T
+##### Json解析转化T
 
 ```
 OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
@@ -29,7 +37,7 @@ OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback 
 })
 ```
 
-###### Json解析转化List\<T\>
+##### Json解析转化List\<T\>
 
 ```
 OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
@@ -47,7 +55,7 @@ OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback 
 })
 ```
 
-###### Okhttp post请求
+##### Okhttp post请求
 
 ```
 val hashMap = java.util.HashMap<String, String>()
