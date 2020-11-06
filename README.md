@@ -17,6 +17,7 @@ implementation 'com.github.ymkiux:tools:0.0.12'
 | Json array转化为List<T> |携带参数以及头部自定义参数|
 | Json对象类型字符串通过key获取value |通过图片链接获取bitmap|
 | Json数组类型字符串通过key获取value |通过文件下载链接获取流并下载至公有目录Download下|
+|将hashmap转化为Jsonobject、JsonArray |/|
 
 #### 简单使用
 

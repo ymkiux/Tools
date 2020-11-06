@@ -6,6 +6,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
+import java.util.HashMap
 
 
 object Json {
@@ -79,5 +80,27 @@ object Json {
             return JsonParser().parse(jsonArray).getAsJsonObject().getAsJsonObject().get(key)
         }
         return throw IllegalStateException("This key does not exist at present")
+    }
+
+    /**
+     *Convert hashMap to JsonObject
+     *@param hashMap hashMap param
+     */
+    @JvmStatic
+    fun getJsonObject(hashMap: HashMap<String, String>): JsonObject? {
+        val jsonObject = JsonObject()
+        for (key in hashMap.keys) {
+            if (hashMap[key] != null) jsonObject.add(key, JsonParser().parse(hashMap[key]!!))
+        }
+        return jsonObject
+    }
+
+    /**
+     * Convert hashMap to JsonArray
+     * @param hashMap hashMap param
+     */
+    fun getJsonArray(hashMap: HashMap<String, String>): JsonArray? {
+        val jsonObject = getJsonObject(hashMap)
+        return JsonParser().parse("[$jsonObject]").asJsonArray
     }
 }
