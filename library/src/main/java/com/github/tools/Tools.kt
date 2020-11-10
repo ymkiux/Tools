@@ -11,23 +11,24 @@ object Tools {
 
     /**
      * The save data flow operation is called through a subThread
+     * @param url url link
      * @param inputStream The data entry stream
      */
     @JvmStatic
-    fun downFile(inputStream: InputStream) {
+    fun downFile(url: String, inputStream: InputStream) {
         Thread(Runnable {
-            saveFile(inputStream)
+            saveFile(url, inputStream)
         }).start()
     }
 
     /**
      * saved to the specified directory via a sightread
+     * @param url url link
      * @param inputStream The data entry stream
      */
-    private fun saveFile(inputStream: InputStream) {
+    private fun saveFile(url: String, inputStream: InputStream) {
         var len = 0
         val buf = ByteArray(2048)
-        val url = OkGo.url!!
         val externalStoragePublicDirectory =
             Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
         val f = File(externalStoragePublicDirectory.toString())
