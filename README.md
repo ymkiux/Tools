@@ -11,71 +11,98 @@ implementation 'com.github.ymkiux:tools:0.0.12'
 ```
 ##### 已实现功能
 
-| Json| OkGo |
-| :--------------: | :--------------: |
-| Json obejct转化为T，Json array转化为List<T> |普通get/post回调，携带参数的post回调|
-| Json对象类型字符串通过key获取value |携带参数以及头部自定义参数|
-| Json数组类型字符串通过key获取value |通过图片链接获取bitmap|
-| 将hashmap转化为Jsonobject，JsonArray |通过文件下载链接获取流并下载至公有目录Download下|
+| Json| OkGo | Tools |
+| :--------------: | :--------------: | :--------------: |
+| Json obejct转化为T，Json array转化为List<T> |普通get/post回调，携带参数的post回调| SP简单封装(增删查) |
+| Json对象,数组类型字符串通过key获取value |携带参数以及头部自定义参数| 通过图片链接获取bitmap |
+|    将hashmap转化为Jsonobject，JsonArray     |--------------| 通过文件下载链接获取流并下载至公有目录Download下 |
+| -------------- |--------------| -------------- |
 
 #### 简单使用
 
 ##### Json解析转化T
 
 ```
-OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
-    override fun success(responseBody: ResponseBody?) {
-        val string = responseBody!!.string()
-        val jsonArrays:TestM = Json.getJsonObject(
-            string,
-            TestM::class.java
-        )
-    }
-    override fun error(e: IOException) {
+OkGo.get().url("https://wanandroid.com/wxarticle/chapters/json").build()!!.enqueue(object :Callback{
+            override fun onFailure(call: Call, e: IOException) {
 
-    }
-})
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val string = response.body!!.string()
+                val jsonObject = Json.getJsonObject(string, WanAndroidHomeBean::class.java)
+                Log.d(TAG, "onResponse: "+jsonObject.data)
+            }
+        })
+```
+
+###### 日志结果
+
+```
+2020-11-11 15:32:18.755 9546-9618/com.twst D/测试: onResponse: [com.twst.bean.WanAndroidHomeBean$DataBean@6822129, com.twst.bean.WanAndroidHomeBean$DataBean@a38ccae, com.twst.bean.WanAndroidHomeBean$DataBean@5205a4f, com.twst.bean.WanAndroidHomeBean$DataBean@264b5dc, com.twst.bean.WanAndroidHomeBean$DataBean@872a6e5, com.twst.bean.WanAndroidHomeBean$DataBean@1c905ba, com.twst.bean.WanAndroidHomeBean$DataBean@a324c6b, com.twst.bean.WanAndroidHomeBean$DataBean@7553c8, com.twst.bean.WanAndroidHomeBean$DataBean@62bcc61, com.twst.bean.WanAndroidHomeBean$DataBean@cf1c386, com.twst.bean.WanAndroidHomeBean$DataBean@c274447, com.twst.bean.WanAndroidHomeBean$DataBean@96fe474, com.twst.bean.WanAndroidHomeBean$DataBean@1f7cd9d, com.twst.bean.WanAndroidHomeBean$DataBean@b969212]
 ```
 
 ##### Json解析转化List\<T\>
 
 ```
-OkGo.getUrl("https://wanandroid.com/wxarticle/chapters/json", object : Callback {
-    override fun success(responseBody: ResponseBody?) {
-        val string = responseBody!!.string()
-        val jsonArray = Json.getJsonObject(string,"data")
-        val jsonArrays:List<TestM> = Json.getJsonArrayList(
-            jsonArray.toString(),
-            TestM::class.java
-        )
-    }
-    override fun error(e: IOException) {
+OkGo.get().url("https://wanandroid.com/wxarticle/chapters/json").build()!!
+            .enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
 
-    }
-})
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val string = response.body!!.string()
+                    val jsonObjectValue = Json.getJsonObjectValue(string, "data").toString()
+                    val jsonArrayList =
+                        Json.getJsonArrayList(jsonObjectValue, WanAndroidHomeBean::class.java)!!
+                    for (i in 0..jsonArrayList.size-1){
+                        Log.d(TAG,  jsonArrayList.get(i).name)
+                    }
+                }
+            })
+```
+
+###### 日志结果
+
+```
+2020-11-11 15:15:04.047 4720-4821/com.twst D/测试: 鸿洋
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 郭霖
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 玉刚说
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 承香墨影
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: Android群英传
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: code小生
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 谷歌开发者
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 奇卓社
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 美团技术团队
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: GcsSloop
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 互联网侦察
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: susion随心
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: 程序亦非猿
+2020-11-11 15:15:04.048 4720-4821/com.twst D/测试: Gityuan
 ```
 
 ##### Okhttp post请求
 
 ```
-val hashMap = java.util.HashMap<String, String>()
-hashMap.put("local_version","1.090103")
-OkGo.postUrl("http://192.168.0.104:8080/api/update",hashMap,object :Callback{
-    /**
-     * Called when the HTTP response was successfully returned by the remote server
-     */
-    override fun success(responseBody: ResponseBody?) {
-        Log.d("测试", "success: " + responseBody!!.string())
-    }
+OkGo.post().url("https://www.wanandroid.com/lg/uncollect_originId/2333/json")
+            .addParams("id", "1").build()!!.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
 
-    /**
-     * Called when the request could not be executed due to cancellation
-     */
-    override fun error(e: IOException) {
-        Log.d("测试", "error: " )
-    }
+            }
 
-})
+            override fun onResponse(call: Call, response: Response) {
+                Log.d(TAG, "onResponse: "+response.body!!.string())
+            }
+        })
 ```
 
-> 由于空闲时间编写 如有不足还请指正
+###### 日志结果
+
+```
+2020-11-11 15:27:07.092 7904-7979/com.twst D/测试: onResponse: {"errorCode":-1001,"errorMsg":"请先登录！"}
+```
+
+#### 尾言
+
+> 如果觉得还不错,期待你的star！
