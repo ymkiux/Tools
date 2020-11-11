@@ -1,12 +1,10 @@
 package com.github.tools
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.StrictMode
-import com.github.tools.Tools.getLog
-import okhttp3.*
-import okhttp3.Callback
-import java.io.IOException
+import com.twst.presenter.Tools.getLogI
+import okhttp3.Call
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -98,7 +96,7 @@ object OkGo {
                                     .build()
                                 val newCall = client.newCall(request)
                                 val endTime = System.currentTimeMillis()
-                                getLog(
+                                getLogI(
                                     this@OkGo.toString()
                                         .substring(0, this@OkGo.toString().indexOf("@"))
                                         .substring(this@OkGo.toString().lastIndexOf(".") + 1),
@@ -124,7 +122,7 @@ object OkGo {
                                     .build()
                                 val newCall = client.newCall(request)
                                 val endTime = System.currentTimeMillis()
-                                getLog(
+                                getLogI(
                                     this@OkGo.toString()
                                         .substring(0, this@OkGo.toString().indexOf("@"))
                                         .substring(this@OkGo.toString().lastIndexOf(".") + 1),
@@ -160,7 +158,7 @@ object OkGo {
                                     .build()
                                 val newCall = client.newCall(request)
                                 val endTime = System.currentTimeMillis()
-                                getLog(
+                                getLogI(
                                     this@OkGo.toString()
                                         .substring(0, this@OkGo.toString().indexOf("@"))
                                         .substring(this@OkGo.toString().lastIndexOf(".") + 1),
@@ -194,7 +192,7 @@ object OkGo {
                                     .build()
                                 val newCall = client.newCall(request)
                                 val endTime = System.currentTimeMillis()
-                                getLog(
+                                getLogI(
                                     this@OkGo.toString()
                                         .substring(0, this@OkGo.toString().indexOf("@"))
                                         .substring(this@OkGo.toString().lastIndexOf(".") + 1),
@@ -208,36 +206,5 @@ object OkGo {
             }
         }
         return null
-    }
-
-    /**
-     * Get bitmaps from the picture url
-     * Suitable for situations where the amount of data requested by the network is small
-     * @param url url link
-     */
-    @JvmStatic
-    fun getBitmap(url: String): Bitmap {
-        val policy =
-            StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-        val byteStream = get().url(url).build()!!.execute().body!!.byteStream()
-        return BitmapFactory.decodeStream(byteStream)
-    }
-
-    /**
-     *Download the file via url to the /Download directory
-     * @param url url file link
-     */
-    @JvmStatic
-    fun downFile(url: String) {
-        get().url(url).build()!!.enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                Tools.downFile(url, response.body!!.byteStream())
-            }
-        })
     }
 }
