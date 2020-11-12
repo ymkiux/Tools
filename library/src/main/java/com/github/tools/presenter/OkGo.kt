@@ -1,10 +1,7 @@
 package com.github.tools
 
 import com.twst.presenter.Tools.getLogI
-import okhttp3.Call
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -137,6 +134,58 @@ object OkGo {
             true -> {
                 when (hashMapParam.size) {
                     0 -> {
+                        val startTime = System.currentTimeMillis()
+                        when (hashMapHead.size) {
+                            0 -> {
+                                val client: OkHttpClient = OkHttpClient.Builder()
+                                    .connectTimeout(4, TimeUnit.SECONDS)
+                                    .readTimeout(0, TimeUnit.SECONDS).build()
+                                val requestBody: RequestBody = FormBody.Builder()
+                                    .build()
+                                val request: Request = Request.Builder()
+                                    .url(url!!)
+                                    .post(requestBody)
+                                    .build()
+                                val newCall = client.newCall(request)
+                                val endTime = System.currentTimeMillis()
+                                getLogI(
+                                    this@OkGo.toString()
+                                        .substring(0, this@OkGo.toString().indexOf("@"))
+                                        .substring(this@OkGo.toString().lastIndexOf(".") + 1),
+                                    "--> POST\t" + url + "\t" + (endTime - startTime) + "ms"
+                                )
+                                return newCall
+                            }
+                            1 -> {
+                                var keys: String? = null
+                                var value: String? = null
+                                for (key in hashMapHead.keys) {
+                                    if (hashMapHead[key] != null) {
+                                        keys = key
+                                        value = hashMapHead[key]!!
+                                    }
+                                }
+                                val client: OkHttpClient = OkHttpClient.Builder()
+                                    .connectTimeout(4, TimeUnit.SECONDS)
+                                    .readTimeout(0, TimeUnit.SECONDS).build()
+                                val requestBody: RequestBody = FormBody.Builder()
+                                    .build()
+                                val request: Request = Request.Builder()
+                                    .url(url!!)
+                                    .addHeader(keys!!, value!!)
+                                    .post(requestBody)
+                                    .build()
+                                val newCall = client.newCall(request)
+                                val endTime = System.currentTimeMillis()
+                                getLogI(
+                                    this@OkGo.toString()
+                                        .substring(0, this@OkGo.toString().indexOf("@"))
+                                        .substring(this@OkGo.toString().lastIndexOf(".") + 1),
+                                    "--> POST\t" + url + "\t" + (endTime - startTime) + "ms"
+                                )
+                                return newCall
+                            }
+                        }
                     }
                     else -> {
                         val startTime = System.currentTimeMillis()
