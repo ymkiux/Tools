@@ -1,6 +1,6 @@
-package com.github.tools
+package com.github.tools.presenter
 
-import com.twst.presenter.Tools.getLogI
+import com.github.tools.presenter.Tools.getLogI
 import okhttp3.*
 import java.util.*
 import java.util.concurrent.TimeUnit

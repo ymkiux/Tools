@@ -1,4 +1,4 @@
-package com.twst.interfaces
+package com.github.tools.interfaces
 
 interface DownFileCallback {
     //download the callback

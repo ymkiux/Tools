@@ -1,8 +1,8 @@
-package com.twst.task
+package com.github.tools.task
 
 import android.os.Environment
-import com.github.tools.OkGo
-import com.twst.interfaces.DownFileCallback
+import com.github.tools.interfaces.DownFileCallback
+import com.github.tools.presenter.OkGo
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response

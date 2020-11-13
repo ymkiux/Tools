@@ -1,10 +1,10 @@
-package com.twst.task
+package com.github.tools.task
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.StrictMode
-import com.github.tools.OkGo
-import com.twst.interfaces.GetBitmapCallback
+import com.github.tools.interfaces.GetBitmapCallback
+import com.github.tools.presenter.OkGo
 
 object GetBitmapTask : GetBitmapCallback {
     /**

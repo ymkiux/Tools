@@ -10,7 +10,8 @@ object Str {
      * @param str string
      * @param pattern the rules
      */
-    private fun isPositiveQuery(str: String, pattern: String): Boolean {
+    @JvmStatic
+    fun isPositiveQuery(str: String, pattern: String): Boolean {
         val r: Pattern = Pattern.compile(pattern)
         val m: Matcher = r.matcher(str)
         return m.matches()
