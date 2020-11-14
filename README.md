@@ -14,8 +14,8 @@ implementation 'com.github.ymkiux:tools:0.0.12'
 | Json| OkGo | Tools | SP | Str |
 | :--------------: | :--------------: | :--------------: |:--------------: |:------------: |
 | Json obejct转化为T，Json array转化为List<T> |普通get/post回调，携带参数的post回调| 通过图片链接获取bitmap | SP简单封装(增删查) | 字符串正则检测 |
-| Json对象,数组类型字符串通过key获取value |携带参数以及头部自定义参数| 通过文件下载链接获取流并下载至公有目录Download下 | ----------- | -------- |
-|    将hashmap转化为Jsonobject，JsonArray     |--------------| -------------- | ----------- | -------- |
+| Json对象,数组类型字符串通过key获取value |携带参数以及头部自定义参数| 通过文件下载链接获取流并下载至公有目录Download下 | **DataClear** | ------ |
+|    将hashmap转化为Jsonobject，JsonArray     |--------------| -------------- | 删除当前调用应用内置cache字眼目录下所有文件 | ------ |
 
 #### 简单使用
 
