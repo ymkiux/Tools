@@ -14,6 +14,7 @@ implementation 'com.github.ymkiux:tools:latest.release'
     <tr><td bgcolor="#FFFFFF"><center>Json obejct转化为T，Json array转化为List<T></center></td>  <td bgcolor="#FFFFFF"><center>普通get/post回调，携带参数的post回调</center></td>   <td bgcolor="#FFFFFF"><center>通过图片链接获取bitmap</center></td>  <td bgcolor="#FFFFFF"><center>SP简单封装(增删查)</center></td>  <td bgcolor="#FFFFFF"><center>字符串正则检测</center></td> </tr>     
     <tr><td bgcolor="#FFFFFF"><center>Json对象,数组类型字符串通过key获取value</center></td>  <td bgcolor="#FFFFFF"><center>携带参数以及头部自定义参数</center></td>   <td bgcolor="#FFFFFF"><center>通过文件下载链接获取流并下载至公有目录Download下</center></td>  <td colspan="2" bgcolor="#E6E6E6"><center>DataManager</center></td> </tr>
     <td bgcolor="#FFFFFF"><center>将hashmap转化为Jsonobject，JsonArray</center></td><td bgcolor="#FFFFFF"><center>--------------</center></td>  <td bgcolor="#FFFFFF"><center>--------------</center></td><td bgcolor="#FFFFFF"><center>获取存储的图片位图数组，保存图片位图至内置存储内</center></td><td bgcolor="#FFFFFF"><center>删除数据库，键值对，应用内置cache字眼目录下所有文件</center></td></tr> 
+
 #### 简单使用
 
 ##### Json解析转化T
