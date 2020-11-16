@@ -1,11 +1,20 @@
 package com.github.tools.presenter
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
 import com.github.tools.task.DownFileTask
 import com.github.tools.task.GetBitmapTask
+import com.github.tools.task.SaveImgTask
 
 object Tools {
+    private var context: Context? = null
+
+    @JvmStatic
+    fun init(context: Context): Tools {
+        this.context = context
+        return this
+    }
 
     /**
      * call to get a callback to the bitmap
@@ -23,6 +32,16 @@ object Tools {
     @JvmStatic
     fun downFile(url: String) {
         DownFileTask.downCall(url)
+    }
+
+    /**
+     * save bitmap to external public directory
+     * @return return true if the save is successful
+     */
+    @JvmStatic
+    fun saveImg(bitmap: Bitmap): Boolean {
+        if (context == null) return throw NullPointerException("no initialization operation")
+        return SaveImgTask.save(context!!, bitmap)
     }
 
     /**
