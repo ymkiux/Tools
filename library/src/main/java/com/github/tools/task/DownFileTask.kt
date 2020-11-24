@@ -23,7 +23,7 @@ object DownFileTask : DownFileCallback {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                var len = 0
+                var len:Int
                 val buf = ByteArray(2048)
                 val externalStoragePublicDirectory =
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

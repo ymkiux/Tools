@@ -52,11 +52,11 @@ object DataManager {
      */
     @JvmStatic
     fun deleteAllCache() {
-        if (context == null) return throw NullPointerException("no initialization operation")
+        if (context == null)  throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path)
         val otherFile = File(context!!.cacheDir.path.replace("/cache", ""))
-        for (i in otherFile.listFiles().indices) {
-            val name = otherFile.listFiles()[i].name
+        for (i in otherFile.listFiles()!!.indices) {
+            val name = otherFile.listFiles()!![i].name
             val p: Pattern = Pattern.compile("^[A-Za-z0-9].*.cache")
             val m: Matcher = p.matcher(name)
             while (m.find()) {
@@ -70,7 +70,7 @@ object DataManager {
      */
     @JvmStatic
     fun deleteSql() {
-        if (context == null) return throw NullPointerException("no initialization operation")
+        if (context == null)  throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path.replace("/cache", "") + "/databases")
     }
 
@@ -79,7 +79,7 @@ object DataManager {
      */
     @JvmStatic
     fun deleteShared() {
-        if (context == null) return throw NullPointerException("no initialization operation")
+        if (context == null)  throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path.replace("/cache", "") + "/shared_prefs")
     }
 
@@ -90,10 +90,10 @@ object DataManager {
      */
     @JvmStatic
     fun saveImage(bitmap: Bitmap): Boolean {
-        if (context == null) return throw NullPointerException("no initialization operation")
-        if (!File(IMG).exists()) {
+        if (context == null)  throw NullPointerException("no initialization operation")
+        if (!File(IMG!!).exists()) {
             run outSide@{
-                val mkdir = File(IMG).mkdir()
+                val mkdir = File(IMG!!).mkdir()
                 if (mkdir) return@outSide
             }
         }
@@ -124,12 +124,12 @@ object DataManager {
      */
     @JvmStatic
     fun getImgAllArray(): List<Bitmap>? {
-        if (context == null) return throw NullPointerException("no initialization operation")
-        val file = File(IMG)
+        if (context == null)  throw NullPointerException("no initialization operation")
+        val file = File(IMG!!)
         if (!file.exists()) return null
         val listFiles = file.listFiles()
         val arrayList = ArrayList<Bitmap>()
-        for (element in listFiles) {
+        for (element in listFiles!!) {
             val fis = FileInputStream(element.absoluteFile)
             val bitmap = BitmapFactory.decodeStream(fis)
             arrayList.add(bitmap)
@@ -154,7 +154,7 @@ object DataManager {
         val anyFile = File(path)
         if (!anyFile.exists()) return
         val listFiles = anyFile.listFiles()
-        for (i in 0..listFiles.size - 1) {
+        for (i in listFiles!!.indices) {
             if (listFiles[i].isDirectory) {
                 deleteFile(path + "/" + listFiles[i].name)
                 delete(path + "/" + listFiles[i].name)

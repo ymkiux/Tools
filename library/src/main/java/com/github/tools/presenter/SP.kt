@@ -4,20 +4,36 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 
+
+/**
+ * The current SharedPreferences method has been replaced by DataStore
+ * For details, please refer to https://developer.android.com/topic/libraries/architecture/datastore
+ */
 object SP {
 
     //define the sp-stored value file name
     const val fileName = "share_preference"
+
+    //initialization context
+    private var context: Context? = null
+
+    @Deprecated("recommend to use preferences dataStore api")
+    fun init(): SP {
+        this.context = context
+        return this
+    }
+
 
     /**
      * set the content to key
      * @param key key
      * @param value key value
      */
-    @JvmStatic
-    fun Context.set(key: String, value: Any) {
+    @Deprecated("recommend to use preferences dataStore api")
+    fun set(key: String, value: Any) {
+        if (context == null) throw NullPointerException("no initialization operation")
         val sp: SharedPreferences =
-            this.getSharedPreferences(fileName, MODE_PRIVATE)
+            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
         when (value) {
             is String -> sp.edit().putString(key, value).apply()
             is Int -> sp.edit().putInt(key, value).apply()
@@ -33,10 +49,11 @@ object SP {
      * @param key key
      * @param value key value
      */
-    @JvmStatic
-    fun Context.get(key: String, type: Any): Any? {
+    @Deprecated("recommend to use preferences dataStore api")
+    fun get(key: String, type: Any): Any? {
+        if (context == null) throw NullPointerException("no initialization operation")
         val sp: SharedPreferences =
-            this.getSharedPreferences(fileName, MODE_PRIVATE)
+            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
         return when (type) {
             is String -> sp.getString(key, "")
             is Int -> sp.getInt(key, 0)
@@ -51,10 +68,11 @@ object SP {
      * detect the presence of keys
      * @param key key
      */
-    @JvmStatic
-    fun Context.checkKey(key: String): Boolean {
+    @Deprecated("recommend to use preferences dataStore api")
+    fun checkKey(key: String): Boolean {
+        if (context == null) throw NullPointerException("no initialization operation")
         val sp: SharedPreferences =
-            this.getSharedPreferences(fileName, MODE_PRIVATE)
+            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
         return sp.contains(key)
     }
 
@@ -62,20 +80,22 @@ object SP {
      * delete the content for key
      * @param key key
      */
-    @JvmStatic
-    fun Context.clearKey(key: String) {
+    @Deprecated("recommend to use preferences dataStore api")
+    fun clearKey(key: String) {
+        if (context == null) throw NullPointerException("no initialization operation")
         val sp: SharedPreferences =
-            this.getSharedPreferences(fileName, MODE_PRIVATE)
+            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
         sp.edit().remove(key).apply()
     }
 
     /**
      * delete the contents of all keys in the current file
      */
-    @JvmStatic
-    fun Context.clearAll() {
+    @Deprecated("recommend to use preferences dataStore api")
+    fun clearAll() {
+        if (context == null) throw NullPointerException("no initialization operation")
         val sp: SharedPreferences =
-            this.getSharedPreferences(fileName, MODE_PRIVATE)
+            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
         sp.edit().clear().apply()
     }
 }

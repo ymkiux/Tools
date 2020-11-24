@@ -16,7 +16,7 @@ object Json {
     @Throws(JSONException::class)
     @JvmStatic
     fun <T> getJsonObject(text: String, cls: Class<T>): T {
-        if (!text.startsWith("{") && !text.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
+        if (!text.startsWith("{") && !text.endsWith("}")) throw IllegalArgumentException("Strings are not json object types")
         return Gson().fromJson(text, cls)
     }
 
@@ -51,7 +51,7 @@ object Json {
     @Throws(JSONException::class)
     @JvmStatic
     fun getJsonObjectValue(res: String, key: String): Any {
-        if (!res.startsWith("{") && !res.endsWith("}")) return throw IllegalArgumentException("Strings are not json object types")
+        if (!res.startsWith("{") && !res.endsWith("}")) throw IllegalArgumentException("Strings are not json object types")
         return JsonParser().parse(res).getAsJsonObject().get(key)
     }
 
@@ -73,10 +73,10 @@ object Json {
             } catch (e: JsonSyntaxException) {
                 e.printStackTrace()
             }
-            if (keyValue == null) return throw IllegalStateException("The key currently exists but is not in this group")
+            if (keyValue == null) throw IllegalStateException("The key currently exists but is not in this group")
             return JsonParser().parse(jsonArray).getAsJsonObject().getAsJsonObject().get(key)
         }
-        return throw IllegalStateException("This key does not exist at present")
+        throw IllegalStateException("This key does not exist at present")
     }
 
     /**

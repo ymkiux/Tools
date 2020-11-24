@@ -2,13 +2,19 @@ package com.github.tools.presenter
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import com.github.tools.interfaces.HandlePostBack
 import com.github.tools.task.DownFileTask
 import com.github.tools.task.GetBitmapTask
 import com.github.tools.task.SaveImgTask
 
 object Tools {
     private var context: Context? = null
+
+    /** default main thread id **/
+    private var threadTag: Boolean = false
 
     @JvmStatic
     fun init(context: Context): Tools {
@@ -40,12 +46,41 @@ object Tools {
      */
     @JvmStatic
     fun saveImg(bitmap: Bitmap): Boolean {
-        if (context == null) return throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         return SaveImgTask.save(context!!, bitmap)
     }
 
     /**
-     *A prompt message
+     * used in the main thread by default
+     * perform related operations by implementing this method
+     * @param handlePostBack callback interface
+     * @param delayMillis delay time
+     */
+    fun handlerPostDelayed(handlePostBack: HandlePostBack, delayMillis: Long) {
+        when (threadTag) {
+            true -> {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    handlePostBack.doWork()
+                }, delayMillis)
+            }
+            false -> {
+                Handler().postDelayed({
+                    handlePostBack.doWork()
+                }, delayMillis)
+            }
+        }
+    }
+
+    /**
+     * the thread is switched to be in a child thread state
+     */
+    fun switchThread(): Tools {
+        this.threadTag = true
+        return this
+    }
+
+    /**
+     * A prompt message
      * @param tag Label
      * @param msg Tips
      */
