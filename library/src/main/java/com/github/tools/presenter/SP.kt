@@ -3,7 +3,7 @@ package com.github.tools.presenter
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import java.util.HashMap
+import java.util.*
 
 
 /**
