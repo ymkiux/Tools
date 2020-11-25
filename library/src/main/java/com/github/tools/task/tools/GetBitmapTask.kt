@@ -1,4 +1,4 @@
-package com.github.tools.task
+package com.github.tools.task.tools
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

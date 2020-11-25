@@ -1,4 +1,4 @@
-package com.github.tools.task
+package com.github.tools.task.tools
 
 import android.content.Context
 import android.graphics.Bitmap

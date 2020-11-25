@@ -9,6 +9,8 @@ import android.os.Environment
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.lang.Double
+import java.math.BigDecimal
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -52,7 +54,7 @@ object DataManager {
      */
     @JvmStatic
     fun deleteAllCache() {
-        if (context == null)  throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path)
         val otherFile = File(context!!.cacheDir.path.replace("/cache", ""))
         for (i in otherFile.listFiles()!!.indices) {
@@ -70,7 +72,7 @@ object DataManager {
      */
     @JvmStatic
     fun deleteSql() {
-        if (context == null)  throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path.replace("/cache", "") + "/databases")
     }
 
@@ -79,7 +81,7 @@ object DataManager {
      */
     @JvmStatic
     fun deleteShared() {
-        if (context == null)  throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         delete(context!!.cacheDir.path.replace("/cache", "") + "/shared_prefs")
     }
 
@@ -90,7 +92,7 @@ object DataManager {
      */
     @JvmStatic
     fun saveImage(bitmap: Bitmap): Boolean {
-        if (context == null)  throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         if (!File(IMG!!).exists()) {
             run outSide@{
                 val mkdir = File(IMG!!).mkdir()
@@ -124,7 +126,7 @@ object DataManager {
      */
     @JvmStatic
     fun getImgAllArray(): List<Bitmap>? {
-        if (context == null)  throw NullPointerException("no initialization operation")
+        if (context == null) throw NullPointerException("no initialization operation")
         val file = File(IMG!!)
         if (!file.exists()) return null
         val listFiles = file.listFiles()
@@ -136,6 +138,66 @@ object DataManager {
         }
         return arrayList
     }
+
+    /**
+     * get the corresponding file size by calling the default cache path to represent the current application default cache size
+     * @return return to the default cache
+     */
+    fun getDefaultCacheSize(): String? {
+        var cacheSize: Long = getFolderSize(context!!.getCacheDir())
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            cacheSize += getFolderSize(context!!.getExternalCacheDir())
+        }
+        return getFormatSize(cacheSize)
+    }
+
+    /**
+     * count the default cache size by traversing the file size in the record directory
+     * @param file file path
+     * @return returns the default cache size
+     */
+    private fun getFolderSize(file: File?): Long {
+        var size: Long = 0
+        if (file != null) {
+            val fileList: Array<File> = file.listFiles()
+            if (fileList != null && fileList.size > 0) {
+                for (i in fileList.indices) {
+                    if (fileList[i].isDirectory()) {
+                        size = size + getFolderSize(fileList[i])
+                    } else {
+                        size = size + fileList[i].length()
+                    }
+                }
+            }
+        }
+        return size
+    }
+
+    /**
+     * get the theoretical default cache value through specific group formatting
+     * @param size cache size
+     * @return return format cache size
+     */
+    private fun getFormatSize(size: Long): String? {
+        val kiloByte = size / 1024
+        val megaByte = kiloByte / 1024
+        val gigaByte = megaByte / 1024
+        if (gigaByte < 1) {
+            val result2 = BigDecimal(megaByte.toDouble().toString())
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+                .toPlainString().toString() + "MB"
+        }
+        val teraBytes = gigaByte / 1024
+        if (teraBytes < 1) {
+            val result3 = BigDecimal(Double.toString(gigaByte.toDouble()))
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+                .toPlainString().toString() + "GB"
+        }
+        val result4: BigDecimal = BigDecimal.valueOf(teraBytes)
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+            .toString() + "TB"
+    }
+
 
     /**
      * call the method of deleting files in the current folder before deleting

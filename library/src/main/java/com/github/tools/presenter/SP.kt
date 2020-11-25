@@ -3,6 +3,7 @@ package com.github.tools.presenter
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import java.util.HashMap
 
 
 /**
@@ -62,6 +63,23 @@ object SP {
             is Long -> sp.getLong(key, 1)
             else -> throw ClassCastException("The current type is abnormal")
         }
+    }
+
+    /**
+     * get the specified key value collection
+     * @param name key-value file name
+     * @param mode operation mode Context.MODE_PRIVATE:the default operation mode, which means that the file is private data
+     * @return the set of key-value pairs in the specified key-value file name
+     */
+    fun spGetMap(name: String, mode: Int = Context.MODE_PRIVATE): HashMap<String, Any?> {
+        if (context == null) throw NullPointerException("no initialization operation")
+        val sp = context!!.getSharedPreferences(name, mode)
+        val all = sp.all
+        val hashMap = HashMap<String, Any?>()
+        for (key in all.keys) {
+            hashMap.put(key, all[key])
+        }
+        return hashMap
     }
 
     /**
