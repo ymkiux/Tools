@@ -8,19 +8,10 @@ import android.util.Log
 import com.github.tools.interfaces.HandlePostBack
 import com.github.tools.task.tools.DownFileTask
 import com.github.tools.task.tools.GetBitmapTask
-import com.github.tools.task.tools.SaveImgTask
 
 object Tools {
-    private var context: Context? = null
+    private var context: Context = com.github.tools.data.Context.getContext()
 
-    /**
-     * initialization context
-     * @return this
-     */
-    fun init(context: Context): Tools {
-        this.context = context
-        return this
-    }
 
     /**
      * call to get a callback to the bitmap
@@ -40,11 +31,15 @@ object Tools {
 
     /**
      * save bitmap to external public directory
+     * @param IMG_TAG create internal and external image storage location identification
      * @return return true if the save is successful
      */
-    fun saveImg(bitmap: Bitmap): Boolean {
-        if (context == null) throw NullPointerException("no initialization operation")
-        return SaveImgTask.save(context!!, bitmap)
+    fun saveImg(
+        bitmap: Bitmap,
+        IMG: String = context.filesDir.path + "/IMG",
+        IMG_TAG: Boolean = false
+    ): Boolean {
+        return DataManager.saveImage(bitmap, IMG, IMG_TAG)
     }
 
     /**

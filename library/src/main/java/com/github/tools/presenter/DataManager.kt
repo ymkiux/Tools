@@ -18,45 +18,14 @@ import java.util.regex.Pattern
 object DataManager {
 
     //build context instantiation
-    private var context: Context? = null
-
-    //build img instantiation
-    private var IMG: String? = null
-
-    //create internal and external image storage location identification
-    private var IMG_TAG: Boolean = false
-
-    /**
-     * initialize the context
-     * @param context context
-     * @return itself
-     */
-    @JvmStatic
-    fun init(context: Context): DataManager {
-        this.context = context
-        this.IMG = context.filesDir.path + "/IMG"
-        return this
-    }
-
-    /**
-     * using this method means to store the picture in an external public picture directory
-     * @param IMG_TAG change storage id
-     * @return this class
-     */
-    @JvmStatic
-    fun externalImageLibrary(): DataManager {
-        IMG_TAG = true
-        return this
-    }
+    private var context: Context = com.github.tools.data.Context.getContext()
 
     /**
      * after the call, delete all files containing the cache word directory under the current application built-in path
      */
-    @JvmStatic
     fun deleteAllCache() {
-        if (context == null) throw NullPointerException("no initialization operation")
-        delete(context!!.cacheDir.path)
-        val otherFile = File(context!!.cacheDir.path.replace("/cache", ""))
+        delete(context.cacheDir.path)
+        val otherFile = File(context.cacheDir.path.replace("/cache", ""))
         for (i in otherFile.listFiles()!!.indices) {
             val name = otherFile.listFiles()!![i].name
             val p: Pattern = Pattern.compile("^[A-Za-z0-9].*.cache")
@@ -70,32 +39,31 @@ object DataManager {
     /**
      * delete all files in the database
      */
-    @JvmStatic
     fun deleteSql() {
-        if (context == null) throw NullPointerException("no initialization operation")
-        delete(context!!.cacheDir.path.replace("/cache", "") + "/databases")
+        delete(context.cacheDir.path.replace("/cache", "") + "/databases")
     }
 
     /**
      * delete all files in sharedPreferences
      */
-    @JvmStatic
     fun deleteShared() {
-        if (context == null) throw NullPointerException("no initialization operation")
-        delete(context!!.cacheDir.path.replace("/cache", "") + "/shared_prefs")
+        delete(context.cacheDir.path.replace("/cache", "") + "/shared_prefs")
     }
 
     /**
      * save the bitmap to the built-in storage and return whether the save is successful
      * @param bitmap img bitmap
+     * @param IMG_TAG create internal and external image storage location identification
      * @return return true if the save is successful
      */
-    @JvmStatic
-    fun saveImage(bitmap: Bitmap): Boolean {
-        if (context == null) throw NullPointerException("no initialization operation")
-        if (!File(IMG!!).exists()) {
+    fun saveImage(
+        bitmap: Bitmap,
+        IMG: String,
+        IMG_TAG: Boolean = false
+    ): Boolean {
+        if (!File(IMG).exists()) {
             run outSide@{
-                val mkdir = File(IMG!!).mkdir()
+                val mkdir = File(IMG).mkdir()
                 if (mkdir) return@outSide
             }
         }
@@ -114,7 +82,7 @@ object DataManager {
                 Uri.fromFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES))
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             intent.data = uri
-            context!!.sendBroadcast(intent)
+            context.sendBroadcast(intent)
         }
         if (!File(recording).exists()) return false
         return true
@@ -125,9 +93,8 @@ object DataManager {
      * @return picture bitmap array
      */
     @JvmStatic
-    fun getImgAllArray(): List<Bitmap>? {
-        if (context == null) throw NullPointerException("no initialization operation")
-        val file = File(IMG!!)
+    fun getImgAllArray(IMG: String = context.filesDir.path + "/IMG"): List<Bitmap>? {
+        val file = File(IMG)
         if (!file.exists()) return null
         val listFiles = file.listFiles()
         val arrayList = ArrayList<Bitmap>()
@@ -144,9 +111,9 @@ object DataManager {
      * @return return to the default cache
      */
     fun getDefaultCacheSize(): String? {
-        var cacheSize: Long = getFolderSize(context!!.getCacheDir())
+        var cacheSize: Long = getFolderSize(context.getCacheDir())
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            cacheSize += getFolderSize(context!!.getExternalCacheDir())
+            cacheSize += getFolderSize(context.getExternalCacheDir())
         }
         return getFormatSize(cacheSize)
     }

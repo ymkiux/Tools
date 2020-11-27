@@ -12,15 +12,18 @@ import java.util.*
  */
 object SP {
 
-    //define the sp-stored value file name
-    const val fileName = "share_preference"
+    private var context: Context = com.github.tools.data.Context.getContext()
 
-    //initialization context
-    private var context: Context? = null
+    //initialize the current collection
+    private var hashMap: HashMap<String, Any> = HashMap<String, Any>()
 
-    @Deprecated("recommend to use preferences dataStore api")
-    fun init(): SP {
-        this.context = context
+    /**
+     * add param
+     * @param
+     */
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun add(key: String, value: Any): SP {
+        hashMap.put(key, value)
         return this
     }
 
@@ -29,68 +32,48 @@ object SP {
      * set the content to key
      * @param key key
      * @param value key value
+     * @param fileName define the sp-stored value file name
      */
-    @Deprecated("recommend to use preferences dataStore api")
-    fun set(key: String, value: Any) {
-        if (context == null) throw NullPointerException("no initialization operation")
-        val sp: SharedPreferences =
-            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
-        when (value) {
-            is String -> sp.edit().putString(key, value).apply()
-            is Int -> sp.edit().putInt(key, value).apply()
-            is Float -> sp.edit().putFloat(key, value).apply()
-            is Boolean -> sp.edit().putBoolean(key, value).apply()
-            is Long -> sp.edit().putLong(key, value).apply()
-            else -> throw ClassCastException("The current type is abnormal")
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun set(fileName: String = "share_preference") {
+        if (hashMap.size == 0) throw NullPointerException("no param")
+        val sp: SharedPreferences = context.getSharedPreferences(fileName, MODE_PRIVATE)
+        for (key in hashMap.keys) {
+            val value = hashMap[key]
+            when (value) {
+                is String -> sp.edit().putString(key, value).apply()
+                is Int -> sp.edit().putInt(key, value).apply()
+                is Float -> sp.edit().putFloat(key, value).apply()
+                is Boolean -> sp.edit().putBoolean(key, value).apply()
+                is Long -> sp.edit().putLong(key, value).apply()
+                else -> throw ClassCastException("The current type is abnormal")
+            }
         }
     }
+
 
     /**
      * get the content to key
      * @param key key
      * @param value key value
      */
-    @Deprecated("recommend to use preferences dataStore api")
-    fun get(key: String, type: Any): Any? {
-        if (context == null) throw NullPointerException("no initialization operation")
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun get(key: String, fileName: String = "share_preference"): Any? {
         val sp: SharedPreferences =
-            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
-        return when (type) {
-            is String -> sp.getString(key, "")
-            is Int -> sp.getInt(key, 0)
-            is Float -> sp.getFloat(key, 0f)
-            is Boolean -> sp.getBoolean(key, false)
-            is Long -> sp.getLong(key, 1)
-            else -> throw ClassCastException("The current type is abnormal")
-        }
+            context.getSharedPreferences(fileName, MODE_PRIVATE)
+        return sp.all[key]
     }
 
-    /**
-     * get the specified key value collection
-     * @param name key-value file name
-     * @param mode operation mode Context.MODE_PRIVATE:the default operation mode, which means that the file is private data
-     * @return the set of key-value pairs in the specified key-value file name
-     */
-    fun spGetMap(name: String, mode: Int = Context.MODE_PRIVATE): HashMap<String, Any?> {
-        if (context == null) throw NullPointerException("no initialization operation")
-        val sp = context!!.getSharedPreferences(name, mode)
-        val all = sp.all
-        val hashMap = HashMap<String, Any?>()
-        for (key in all.keys) {
-            hashMap.put(key, all[key])
-        }
-        return hashMap
-    }
 
     /**
      * detect the presence of keys
      * @param key key
+     * @return returns whether the value corresponding to this key exists
      */
-    @Deprecated("recommend to use preferences dataStore api")
-    fun checkKey(key: String): Boolean {
-        if (context == null) throw NullPointerException("no initialization operation")
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun checkKey(key: String, fileName: String = "share_preference"): Boolean {
         val sp: SharedPreferences =
-            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
+            context.getSharedPreferences(fileName, MODE_PRIVATE)
         return sp.contains(key)
     }
 
@@ -98,22 +81,22 @@ object SP {
      * delete the content for key
      * @param key key
      */
-    @Deprecated("recommend to use preferences dataStore api")
-    fun clearKey(key: String) {
-        if (context == null) throw NullPointerException("no initialization operation")
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun deleteKey(key: String, fileName: String = "share_preference"): Boolean {
         val sp: SharedPreferences =
-            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
+            context.getSharedPreferences(fileName, MODE_PRIVATE)
         sp.edit().remove(key).apply()
+        return sp.all.get(key) == null
     }
 
     /**
      * delete the contents of all keys in the current file
      */
-    @Deprecated("recommend to use preferences dataStore api")
-    fun clearAll() {
-        if (context == null) throw NullPointerException("no initialization operation")
+    @Deprecated("the recommended method is in line 10 of this category")
+    fun deleteAll(fileName: String = "share_preference"): Boolean {
         val sp: SharedPreferences =
-            context!!.getSharedPreferences(fileName, MODE_PRIVATE)
+            context.getSharedPreferences(fileName, MODE_PRIVATE)
         sp.edit().clear().apply()
+        return sp.all.isEmpty()
     }
 }
