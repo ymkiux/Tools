@@ -1,10 +1,14 @@
 package com.github.tools.presenter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import com.github.tools.interfaces.ConfirmCallback
 import com.github.tools.interfaces.HandlePostBack
 import com.github.tools.task.tools.DownFileTask
 import com.github.tools.task.tools.GetBitmapTask
@@ -66,6 +70,31 @@ object Tools {
                 }, delayMillis)
             }
         }
+    }
+
+    /**
+     * effectively solve the repeated construction of alertDialog custom layout
+     * @param id layout format:R.layout.xxx
+     * @param confirmCallback click to implement this interface to customize the operation events
+     * @return  a view so that the controls can be operated by the user
+     */
+    fun showAlertDialog(id: Int, confirmCallback: ConfirmCallback): View {
+        var show: AlertDialog? = null
+        val customizeDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+        customizeDialog.setCancelable(false)
+        val infoview: View = LayoutInflater.from(context).inflate(
+            id,
+            null, false
+        )
+        customizeDialog.setView(infoview)
+        customizeDialog.setPositiveButton(
+            "确定"
+        ) { dialog, which ->
+            confirmCallback.doWork()
+            show!!.dismiss()
+        }
+        show = customizeDialog.show()
+        return infoview
     }
 
 
