@@ -1,21 +1,22 @@
 package com.github.tools.presenter
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import com.github.tools.interfaces.ConfirmCallback
 import com.github.tools.interfaces.HandlePostBack
 import com.github.tools.task.tools.DownFileTask
 import com.github.tools.task.tools.GetBitmapTask
+import java.util.*
 
 object Tools {
     private var context: Context = com.github.tools.data.Context.getContext()
-
 
     /**
      * call to get a callback to the bitmap
@@ -81,7 +82,7 @@ object Tools {
     fun showAlertDialog(id: Int, confirmCallback: ConfirmCallback): View {
         var show: AlertDialog? = null
         val customizeDialog: AlertDialog.Builder = AlertDialog.Builder(context)
-        customizeDialog.setCancelable(false)
+        customizeDialog.setCancelable(true)
         val infoview: View = LayoutInflater.from(context).inflate(
             id,
             null, false
@@ -97,31 +98,36 @@ object Tools {
         return infoview
     }
 
-
     /**
-     * A prompt message
-     * @param tag Label
-     * @param msg Tips
+     * get the number of activities in the current stack
      */
-    @JvmStatic
-    fun getLogI(tag: String, msg: String) {
-        Log.i(
-            tag,
-            msg
-        )
+    @SuppressLint("PrivateApi", "DiscouragedPrivateApi")
+    fun getTheNumberInTheStack(): Int {
+        val list: MutableList<Activity> =
+            ArrayList()
+        try {
+            val activityThread =
+                Class.forName("android.app.ActivityThread")
+            val currentActivityThread =
+                activityThread.getDeclaredMethod("currentActivityThread")
+            currentActivityThread.isAccessible = true
+            val activityThreadObject = currentActivityThread.invoke(null)
+            val mActivitiesField =
+                activityThread.getDeclaredField("mActivities")
+            mActivitiesField.isAccessible = true
+            val mActivities =
+                mActivitiesField[activityThreadObject] as Map<Any, Any>
+            for ((_, value) in mActivities) {
+                val activityClientRecordClass: Class<*> = value.javaClass
+                val activityField =
+                    activityClientRecordClass.getDeclaredField("activity")
+                activityField.isAccessible = true
+                val o = activityField[value]
+                list.add(o as Activity)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return list.size
     }
-
-    /**
-     *A error prompt message
-     * @param tag Label
-     * @param msg Tips
-     */
-    @JvmStatic
-    fun getLogR(tag: String, msg: String) {
-        Log.e(
-            tag,
-            msg
-        )
-    }
-
 }

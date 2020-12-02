@@ -7,11 +7,13 @@ object Str {
     /**
      * determines whether the string conforms to the number rule
      * @param str string
+     * @param length by default, determine whether the string length is less than or equal to 18
      * @return compliance with the rules
      */
-    fun isNumber(str: String): Boolean {
-        return RegularTask.isPositiveQuery(str, "^[0-9]{1,20}$")
+    fun isNumber(str: String, length: Int = 18): Boolean {
+        return RegularTask.isPositiveQuery(str, "^[0-9]*$") && str.length <= length
     }
+
 
     /**
      * determines whether the string conforms to the email rule
