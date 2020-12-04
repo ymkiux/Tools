@@ -58,8 +58,8 @@ object DataManager {
      */
     fun saveImage(
         bitmap: Bitmap,
-        IMG: String,
-        IMG_TAG: Boolean = false
+        IMG_TAG: Boolean = false,
+        IMG: String
     ): Boolean {
         if (!File(IMG).exists()) {
             run outSide@{

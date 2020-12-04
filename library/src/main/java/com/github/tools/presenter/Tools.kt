@@ -41,10 +41,10 @@ object Tools {
      */
     fun saveImg(
         bitmap: Bitmap,
-        IMG: String = context.filesDir.path + "/IMG",
-        IMG_TAG: Boolean = false
+        IMG_TAG: Boolean = false,
+        IMG: String = context.filesDir.path + "/IMG"
     ): Boolean {
-        return DataManager.saveImage(bitmap, IMG, IMG_TAG)
+        return DataManager.saveImage(bitmap, IMG_TAG, IMG)
     }
 
     /**
