@@ -40,4 +40,21 @@ class File {
         return File(path).exists()
     }
 
+    /**
+     * determine if the file exists
+     * @param path must be an absolute path
+     * @return there is a state
+     */
+    fun isExists(path: String): Boolean {
+        try {
+            val f = File(path)
+            if (!f.exists()) {
+                return false
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return true
+    }
+
 }

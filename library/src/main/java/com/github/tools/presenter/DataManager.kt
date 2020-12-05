@@ -56,6 +56,7 @@ object DataManager {
      * @param IMG_TAG create internal and external image storage location identification
      * @return return true if the save is successful
      */
+    @Deprecated("the current method is too cumbersome to be deprecated")
     fun saveImage(
         bitmap: Bitmap,
         IMG_TAG: Boolean = false,

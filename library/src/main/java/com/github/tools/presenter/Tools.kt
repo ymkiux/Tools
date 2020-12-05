@@ -11,34 +11,22 @@ import android.view.LayoutInflater
 import android.view.View
 import com.github.tools.interfaces.ConfirmCallback
 import com.github.tools.interfaces.HandlePostBack
-import com.github.tools.task.tools.DownFileTask
-import com.github.tools.task.tools.GetBitmapTask
 import java.util.*
 
 object Tools {
+
     private var context: Context = com.github.tools.data.Context.getContext()
 
-    /**
-     * call to get a callback to the bitmap
-     * @param url url link
-     */
-    fun getBitMap(url: String): Bitmap {
-        return GetBitmapTask.getBitmap(url)
-    }
-
-    /**
-     * call the download callback
-     * @param url url file link
-     */
-    fun downFile(url: String) {
-        DownFileTask.downCall(url)
-    }
 
     /**
      * save bitmap to external public directory
      * @param IMG_TAG create internal and external image storage location identification
      * @return return true if the save is successful
      */
+    @Deprecated(
+        "the current method is too cumbersome to be deprecated",
+        ReplaceWith("DataManager.saveImage(bitmap, IMG_TAG, IMG)")
+    )
     fun saveImg(
         bitmap: Bitmap,
         IMG_TAG: Boolean = false,
