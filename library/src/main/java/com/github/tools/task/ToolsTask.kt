@@ -3,9 +3,12 @@ package com.github.tools.task
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.os.Environment
+import android.os.StrictMode
 import android.provider.MediaStore
+import android.widget.ImageView
 import com.github.tools.interfaces.GetBitmapCallback
 import com.github.tools.interfaces.RightsManagementCallback
 import com.github.tools.operating.L
@@ -31,6 +34,7 @@ object ToolsTask {
      * Suitable for situations where the amount of data requested by the network is small
      * @param url url link
      */
+    @Deprecated("the current method is too cumbersome to be deprecated")
     @JvmStatic
     fun getBitmap(url: String, getBitmapCallback: GetBitmapCallback) {
         OkGo.get().url(url).build()!!.enqueue(object : Callback {
@@ -39,7 +43,38 @@ object ToolsTask {
                 getBitmapCallback.getBitmap(BitmapFactory.decodeStream(response.body!!.byteStream()))
             }
         })
+    }
 
+    /**
+     * Get bitmaps from the picture url
+     * @param url url link
+     * @return bitmap
+     */
+    @JvmStatic
+    fun getBitmap(url: String): Bitmap? {
+        val policy =
+            StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        val byteStream = OkGo.get().url(url).build()!!.execute().body!!.byteStream()
+        return BitmapFactory.decodeStream(byteStream)
+    }
+
+
+    /**
+     * determine the status of the ImageView content
+     * @param imageView imageView view name
+     * @return status
+     */
+    @JvmStatic
+    fun getImgStatus(imageView: ImageView): Boolean {
+        var status = false
+        try {
+            (imageView.drawable as BitmapDrawable).bitmap
+            status = true
+        } catch (e: Exception) {
+            return status
+        }
+        return status
     }
 
     /**
