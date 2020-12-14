@@ -20,9 +20,9 @@ object L {
      * @param time default minimum time display
      */
     @JvmStatic
-    fun t(msg: String?, time: Int = 0) {
+    fun t(msg: String?, time: Int = Toast.LENGTH_SHORT) {
         theCurrentActivity.runOnUiThread {
-            val toast = Toast.makeText(context, msg, Toast.LENGTH_LONG)
+            val toast = Toast.makeText(context, msg, time)
             toast.setText(msg)
             toast.show()
         }

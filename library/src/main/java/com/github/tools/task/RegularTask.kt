@@ -1,4 +1,4 @@
-package com.github.tools.task.str
+package com.github.tools.task
 
 import android.util.Patterns
 import java.util.regex.Matcher

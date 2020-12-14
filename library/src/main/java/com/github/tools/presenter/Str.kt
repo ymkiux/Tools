@@ -1,6 +1,6 @@
 package com.github.tools.presenter
 
-import com.github.tools.task.str.RegularTask
+import com.github.tools.task.RegularTask
 
 object Str {
 

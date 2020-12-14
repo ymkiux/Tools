@@ -193,9 +193,12 @@ object ToolsTask {
                             ).absolutePath
                         ), null, null
                     )
-                    if (checkSaveStatus(time)) L.t(
-                        "保存成功"
-                    )
+                    if (checkSaveStatus(time)) {
+                        L.t(
+                            "保存成功"
+                        )
+                        return
+                    }
                     L.t("保存失败")
                 }
             })
