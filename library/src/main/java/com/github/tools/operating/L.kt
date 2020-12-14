@@ -22,7 +22,9 @@ object L {
     @JvmStatic
     fun t(msg: String?, time: Int = 0) {
         theCurrentActivity.runOnUiThread {
-            Toast.makeText(context, msg, time).show()
+            val toast = Toast.makeText(context, msg, Toast.LENGTH_LONG)
+            toast.setText(msg)
+            toast.show()
         }
     }
 

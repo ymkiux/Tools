@@ -11,6 +11,8 @@ import android.provider.MediaStore
 import android.widget.ImageView
 import com.github.tools.interfaces.GetBitmapCallback
 import com.github.tools.interfaces.RightsManagementCallback
+import com.github.tools.operating.Bitmap.checkSaveStatus
+import com.github.tools.operating.Bitmap.saveBitmapAsPng
 import com.github.tools.operating.L
 import com.github.tools.operating.RightsManagement
 import com.github.tools.presenter.OkGo
@@ -129,6 +131,7 @@ object ToolsTask {
      * @param bitmap picture bitmap
      * @return save bitmap status
      */
+    @Deprecated("It is currently deprecated,the saveImageBitmap method is recommended")
     @JvmStatic
     fun saveImg(bitmap: Bitmap): Boolean {
         var time: String? = null
@@ -165,5 +168,36 @@ object ToolsTask {
                 }
             })
         return status
+    }
+
+
+    /**
+     * save pictures from bitmap to the local public picture catalog refresh the library use boolean to display the save status
+     * @param bitmap picture bitmap
+     */
+    @JvmStatic
+    fun saveImageBitmap(bitmap: Bitmap) {
+        RightsManagement.readAndWritePermissions(theCurrentActivity,
+            object : RightsManagementCallback {
+                /** the action that needs to be done after the permission is obtained is called back to the consumer **/
+                override fun doWork() {
+                    val f: File =
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    val time = System.currentTimeMillis().toString() + ".png"
+                    val file = File(f, time)
+                    saveBitmapAsPng(bitmap, file)
+                    MediaScannerConnection.scanFile(
+                        theCurrentActivity, arrayOf(
+                            Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES
+                            ).absolutePath
+                        ), null, null
+                    )
+                    if (checkSaveStatus(time)) L.t(
+                        "保存成功"
+                    )
+                    L.t("保存失败")
+                }
+            })
     }
 }

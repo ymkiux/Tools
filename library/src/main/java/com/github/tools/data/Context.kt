@@ -41,7 +41,7 @@ object Context {
             }
 
             override fun onActivityCreated(p0: Activity, p1: Bundle?) {
-
+                activity = p0
             }
 
             override fun onActivityResumed(p0: Activity) {

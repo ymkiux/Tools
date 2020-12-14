@@ -56,5 +56,4 @@ class File {
         }
         return true
     }
-
 }
